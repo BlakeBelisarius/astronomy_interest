@@ -1,0 +1,66 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Orbital parameters for inner planets (approximate values)
+planets = {
+    'Mercury': {'a': 0.39, 'e': 0.205, 'i': 7.00},
+    'Venus':   {'a': 0.72, 'e': 0.007, 'i': 3.39},
+    'Earth':   {'a': 1.00, 'e': 0.017, 'i': 0.00},
+    'Mars':    {'a': 1.52, 'e': 0.093, 'i': 1.85}
+}
+
+# Function to calculate 3D orbits
+def calculate_orbit(a, e, i, num_points=500):
+    # Create theta array for the angle around the ellipse (parametric angle)
+    theta = np.linspace(0, 2 * np.pi, num_points)
+    
+    # Calculate r (radius) using the equation of an ellipse
+    r = (a * (1 - e**2)) / (1 + e * np.cos(theta))
+    
+    # Calculate x, y in the plane of the orbit (i.e., before inclination)
+    x = r * np.cos(theta)
+    y = r * np.sin(theta)
+    z = np.zeros_like(x)  # No z displacement yet
+    
+    # Rotate the orbit to account for inclination
+    inclination = np.radians(i)  # Convert inclination to radians
+    x_rot = x
+    y_rot = y * np.cos(inclination) - z * np.sin(inclination)
+    z_rot = y * np.sin(inclination) + z * np.cos(inclination)
+    
+    return x_rot, y_rot, z_rot
+
+# Set up the 3D plot with custom background color and larger figure
+fig = plt.figure(figsize=(12, 10))
+ax = fig.add_subplot(111, projection='3d', facecolor='lightblue')  # Set background color
+
+# Plot each planet's orbit
+for planet, params in planets.items():
+    a = params['a']  # Semi-major axis
+    e = params['e']  # Eccentricity
+    i = params['i']  # Inclination (in degrees)
+    
+    x, y, z = calculate_orbit(a, e, i)
+    
+    # Plot the orbit
+    ax.plot(x, y, z, label=f"{planet}'s Orbit")
+    
+    # Mark the planet's position at one point in the orbit
+    ax.scatter(x[0], y[0], z[0], label=planet, s=50)  # Planet at one point in orbit
+
+# Plot the Sun at the origin
+ax.scatter(0, 0, 0, color='yellow', s=200, label='Sun')
+
+# Labels and plot settings
+ax.set_xlabel('X [AU]')
+ax.set_ylabel('Y [AU]')
+ax.set_zlabel('Z [AU]')
+ax.set_title('Orbits of Inner Planets')
+ax.legend()
+
+# Adjust view angle for better visualization
+ax.view_init(elev=30, azim=120)
+
+# Show the plot with the customized background
+plt.show()
