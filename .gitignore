@@ -1,0 +1,35 @@
+# Ignore Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+
+# Ignore virtual environment folders
+venv/
+env/
+ENV/
+.env
+.venv/
+*.env
+*.venv
+
+# Ignore IDE-specific files (e.g., VSCode, PyCharm)
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Ignore system-specific files
+.DS_Store  # macOS system files
+Thumbs.db  # Windows system files
+desktop.ini  # Windows system file
+
+# Ignore data and output files
+*.csv
+*.log
+*.data
+*.db
+
+# Ignore specific config files
+config.yaml
